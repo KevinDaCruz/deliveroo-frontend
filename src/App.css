@@ -55,7 +55,8 @@ h1 {
 }
 
 .menu {
-  width: 820px;
+  flex: 1 1;
+  margin-right: 30px;
 }
 
 h2 {
@@ -94,7 +95,6 @@ h2 {
 
 .menu-text {
   flex: 1 1;
-  margin-right: 15px;
 }
 
 .pictures-menu {
@@ -129,7 +129,59 @@ h2 {
 .prix {
   color: #808484;
   font-size: 1.1rem;
+  margin-right: 1rem;
 }
 .popular {
   color: #ff8000;
+}
+
+.star {
+  margin-right: 5px;
+}
+
+/*---------------   PANIER   ---------------- */
+
+.item-card {
+  align-items: stretch;
+  align-self: flex-start;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 22px 24px 0 rgba(46, 51, 51, 0.07);
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0;
+}
+
+.cart-section {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 96vw;
+}
+
+.cart {
+  position: sticky;
+  top: 0;
+  width: 350px;
+}
+
+.valid-cart {
+  background: #00cdbd;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 10px;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.empty-cart {
+  color: #868a8a;
+  padding: 3rem 0;
+  text-align: center;
 }

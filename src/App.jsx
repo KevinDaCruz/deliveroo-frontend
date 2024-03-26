@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-library.add(faStar);
 
 import logo from "./assets/img/logo-teal.svg";
+
+library.add(faStar);
 
 function App() {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [cart, setCart] = useState([]);
 
   const fetchData = async () => {
     const response = await axios.get(
@@ -52,7 +56,7 @@ function App() {
           </div>
         </div>
         <div className="section-2">
-          <div className="container">
+          <div className="container cart-section">
             <div className="menu">
               {data.categories.map((title, index) => {
                 if (title.meals.length !== 0) {
@@ -64,21 +68,34 @@ function App() {
                           {title.meals.map((menu) => {
                             return (
                               <>
-                                <div className="menu-item">
-                                  <div className="each-menu">
+                                <div key={menu.id} className="menu-item">
+                                  <div
+                                    className="each-menu"
+                                    onClick={() => {
+                                      console.log("j'ai cliqué");
+                                      const newCart = [...cart];
+                                      newCart.push(menu);
+                                      setCart(newCart);
+                                    }}
+                                  >
                                     <div className="menu-text">
                                       <h3>{menu.title}</h3>
                                       <p>{menu.description}</p>
-                                      <div className="price">
-                                        <span className="prix">
-                                          {menu.price} €
-                                        </span>
-                                        <div>
-                                          <FontAwesomeIcon icon={faStar} />
+
+                                      <div className="popular">
+                                        <div className="price">
+                                          <span className="prix">
+                                            {menu.price} €
+                                          </span>
+
                                           {menu.popular && (
-                                            <span className="popular">
-                                              Populaire
-                                            </span>
+                                            <>
+                                              <FontAwesomeIcon
+                                                icon={faStar}
+                                                className="star"
+                                              />
+                                              <span>Populaire</span>
+                                            </>
                                           )}
                                         </div>
                                       </div>
@@ -105,6 +122,12 @@ function App() {
                   return null;
                 }
               })}
+            </div>
+            <div className="cart">
+              <div className="item-card">
+                <button className="valid-cart">Valider Mon panier</button>
+                <div className="empty-cart">Votre panier est vide</div>
+              </div>
             </div>
           </div>
         </div>
