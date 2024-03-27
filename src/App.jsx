@@ -23,9 +23,45 @@ function App() {
     setIsLoading(false);
   };
 
+  let total = 0;
+
+  for (let i = 0; i < cart.length; i++) {
+    const menu = cart[i];
+    total = total + menu.price * menu.quantity;
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleAddToCart = (menu) => {
+    const newCart = [...cart];
+
+    const found = newCart.find((elem) => elem.id === menu.id);
+
+    if (found) {
+      found.quantity++;
+    } else {
+      newCart.push({ ...menu, quantity: 1 });
+    }
+
+    setCart(newCart);
+  };
+
+  const handleRemoveCart = (menu) => {
+    const newCart = [...cart];
+
+    const found = newCart.find((elem) => elem.id === menu.id);
+
+    if (found.quantity === 1) {
+      const index = newCart.indexOf(found);
+      newCart.splice(index, 1);
+    } else {
+      found.quantity--;
+    }
+
+    setCart(newCart);
+  };
 
   return isLoading ? (
     <span>En cours de chargement... </span>
@@ -61,62 +97,55 @@ function App() {
               {data.categories.map((title, index) => {
                 if (title.meals.length !== 0) {
                   return (
-                    <>
-                      <div className="menu-category">
-                        <h2 key={title.name + index}>{title.name}</h2>
-                        <div className="menu-details">
-                          {title.meals.map((menu) => {
-                            return (
-                              <>
-                                <div key={menu.id} className="menu-item">
-                                  <div
-                                    className="each-menu"
-                                    onClick={() => {
-                                      console.log("j'ai cliqué");
-                                      const newCart = [...cart];
-                                      newCart.push(menu);
-                                      setCart(newCart);
-                                    }}
-                                  >
-                                    <div className="menu-text">
-                                      <h3>{menu.title}</h3>
-                                      <p>{menu.description}</p>
+                    <div key={title.name + index} className="menu-category">
+                      <h2>{title.name}</h2>
+                      <div className="menu-details">
+                        {title.meals.map((menu) => {
+                          return (
+                            <div key={menu.id} className="menu-item">
+                              <div
+                                className="each-menu"
+                                onClick={() => {
+                                  handleAddToCart(menu);
+                                }}
+                              >
+                                <div className="menu-text">
+                                  <h3>{menu.title}</h3>
+                                  <p>{menu.description}</p>
 
-                                      <div className="popular">
-                                        <div className="price">
-                                          <span className="prix">
-                                            {menu.price} €
-                                          </span>
+                                  <div className="popular">
+                                    <div className="price">
+                                      <span className="prix">
+                                        {menu.price} €
+                                      </span>
 
-                                          {menu.popular && (
-                                            <>
-                                              <FontAwesomeIcon
-                                                icon={faStar}
-                                                className="star"
-                                              />
-                                              <span>Populaire</span>
-                                            </>
-                                          )}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="pictures-menu">
-                                      {menu.picture && (
-                                        <img
-                                          className="menu-img"
-                                          src={menu.picture}
-                                          alt=""
-                                        />
+                                      {menu.popular && (
+                                        <>
+                                          <FontAwesomeIcon
+                                            icon={faStar}
+                                            className="star"
+                                          />
+                                          <span>Populaire</span>
+                                        </>
                                       )}
                                     </div>
                                   </div>
                                 </div>
-                              </>
-                            );
-                          })}
-                        </div>
+                                <div className="pictures-menu">
+                                  {menu.picture && (
+                                    <img
+                                      className="menu-img"
+                                      src={menu.picture}
+                                      alt=""
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    </>
+                    </div>
                   );
                 } else {
                   return null;
@@ -124,10 +153,44 @@ function App() {
               })}
             </div>
             <div className="cart">
-              <div className="item-card">
-                <button className="valid-cart">Valider Mon panier</button>
-                <div className="empty-cart">Votre panier est vide</div>
-              </div>
+              {cart.length === 0 ? (
+                <div className="item-card">
+                  <button className="not-valid-cart">Valider mon panier</button>
+                  <div className="empty-cart">Votre panier est vide</div>
+                </div>
+              ) : (
+                <div className="item-card">
+                  <button className="valid-cart">Valider mon panier</button>
+                  <div>
+                    {cart.map((menu) => {
+                      return (
+                        <div key={menu.id}>
+                          <button
+                            onClick={() => {
+                              handleRemoveCart(menu);
+                            }}
+                          >
+                            -
+                          </button>
+                          <span>{menu.quantity}</span>
+                          <button
+                            onClick={() => {
+                              handleAddToCart(menu);
+                            }}
+                          >
+                            +
+                          </button>
+                          <span>{menu.title}</span>
+                          <span>
+                            {(menu.price * menu.quantity).toFixed(2)} €
+                          </span>
+                        </div>
+                      );
+                    })}
+                    <p>Total {total.toFixed(2)}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -185,3 +185,16 @@ h2 {
   padding: 3rem 0;
   text-align: center;
 }
+
+.not-valid-cart {
+  background-color: #bac3c3;
+  color: #8b9a8b;
+  border: none;
+  border-radius: 5px;
+  cursor: not-allowed;
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 10px;
+  padding: 1rem;
+}
